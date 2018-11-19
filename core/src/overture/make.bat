@@ -50,7 +50,8 @@ IF NOT EXIST %ANDROID_X86_CC% (
 
 REM Check environment availability
 IF NOT EXIST %CC% (
-    ECHO "gcc not found"
+    ECHO %CC%
+    ECHO "gcc not found - zhou"
     EXIT 1
 )
 
