@@ -173,6 +173,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
 
             var adView = adView
             if (item.host == "198.199.101.152") {
+                /*
                 if (adView == null) {
                     val params = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                             ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -192,6 +193,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
                     adView.loadAd(adBuilder.build())
                     this.adView = adView
                 } else adView.visibility = View.VISIBLE
+                */
             } else adView?.visibility = View.GONE
         }
 

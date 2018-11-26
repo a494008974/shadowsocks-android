@@ -24,6 +24,7 @@ android {
         targetSdkVersion rootProject.sdkVersion
         versionCode 4060100
         versionName "4.6.1"
+        flavorDimensions "company"
         testApplicationId "com.github.shadowsocks.test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "fa", "fr", "ja", "ko", "ru", "zh-rCN", "zh-rTW"
