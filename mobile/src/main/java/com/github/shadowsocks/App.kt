@@ -26,9 +26,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.github.shadowsocks.preference.BottomSheetPreferenceDialogFragment
 import com.github.shadowsocks.preference.IconListPreference
 import com.takisoft.preferencex.PreferenceFragmentCompat
-import com.jess.arms.base.BaseApplication
 
-class App : BaseApplication() {
+class App : Application() {
     override fun onCreate() {
         super.onCreate()
         Core.init(this, MainActivity::class)

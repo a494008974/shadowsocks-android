@@ -18,11 +18,11 @@ def getCurrentFlavor() {
 
 android {
     signingConfigs {
-        androidkeystore {
-            keyAlias 'android_alias'
-            keyPassword 'android'
-            storeFile file('E:/android.jks')
-            storePassword 'android'
+        config {
+            keyAlias 'bsw'
+            keyPassword 'bswbsw'
+            storeFile file('C:/Users/zhou/Desktop/tools/java-sign/signapk/bsw.keystore')
+            storePassword 'bswbsw'
         }
     }
     buildToolsVersion rootProject.buildToolsVersion
@@ -36,6 +36,7 @@ android {
         flavorDimensions "company"
         testApplicationId "com.github.shadowsocks.test"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
         resConfigs "fa", "fr", "ja", "ko", "ru", "zh-rCN", "zh-rTW"
     }
     buildTypes {
@@ -44,6 +45,7 @@ android {
             pseudoLocalesEnabled true
         }
         release {
+            signingConfig signingConfigs.config
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -92,10 +94,6 @@ dependencies {
     implementation 'com.twofortyfouram:android-plugin-api-for-locale:1.0.4'
     implementation 'net.glxn.qrgen:android:2.0'
     implementation 'xyz.belvi.mobilevision:barcodescanner:2.0.3'
-
-    implementation 'me.jessyan:arms:2.5.0'
-    kapt rootProject.ext.dependencies["butterknife-compiler"] //Butterknife 插件, 很多人因为没加这个而报错, 切记!!!
-    kapt rootProject.ext.dependencies["dagger2-compiler"]//依赖插件
 
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$androidTestVersion"
