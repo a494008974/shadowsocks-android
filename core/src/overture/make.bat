@@ -69,6 +69,7 @@ IF NOT EXIST %GOROOT% (
 SET GOPATH=%DIR%
 SET PATH=%GOROOT%\bin;%GOPATH%\bin;%PATH%
 
+
 SET BUILD=1
 IF EXIST "%TARGET%\armeabi-v7a\liboverture.so" (
 	IF EXIST "%TARGET%\arm64-v8a\liboverture.so" (

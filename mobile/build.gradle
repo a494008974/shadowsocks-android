@@ -28,12 +28,21 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         resConfigs "fa", "fr", "ja", "ko", "ru", "zh-rCN", "zh-rTW"
     }
+    signingConfigs {
+        config {
+            keyAlias 'bsw'
+            keyPassword 'bswbsw'
+            storeFile file('C:/Users/zhou/Desktop/tools/java-sign/signapk/bsw.keystore')
+            storePassword 'bswbsw'
+        }
+    }
     buildTypes {
         debug {
             multiDexEnabled true
             pseudoLocalesEnabled true
         }
         release {
+            signingConfig signingConfigs.config
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -51,6 +60,20 @@ android {
     sourceSets.main.jniLibs.srcDirs +=
             new File(project(':core').buildDir, "intermediates/bundles/${getCurrentFlavor()}/jni")
     sourceSets.main.jniLibs.srcDirs += new File(project(':core').projectDir, "src/overture/bin")
+
+    //多渠道打包
+    productFlavors {
+        xiaomi {
+            manifestPlaceholders = [CHANNEL_VALUE: "xiaomi"]
+        }
+        baidu {
+            manifestPlaceholders = [CHANNEL_VALUE: "baidu"]
+        }
+    }
+
+    productFlavors.all {
+        flavor -> flavor.manifestPlaceholders = [CHANNEL_VALUE: name]
+    }
 }
 
 dependencies {
