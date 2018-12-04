@@ -230,7 +230,8 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Interface, OnPre
                     displayFragment(AboutFragment())
                 }
                 R.id.faq -> {
-                    launchUrl(getString(R.string.faq_url))
+//                    launchUrl(getString(R.string.faq_url))
+                    displayFragment(WebFragment())
                     return true
                 }
                 R.id.customRules -> displayFragment(CustomRulesFragment())
