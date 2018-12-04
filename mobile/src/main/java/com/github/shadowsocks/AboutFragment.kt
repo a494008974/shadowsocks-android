@@ -26,6 +26,7 @@ import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.URLSpan
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,8 @@ import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
+import org.simple.eventbus.EventBus
+import org.simple.eventbus.Subscriber
 
 class AboutFragment : ToolbarFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -60,5 +63,11 @@ class AboutFragment : ToolbarFragment() {
             }
             movementMethod = LinkMovementMethod.getInstance()
         }
+        EventBus.getDefault().post("<===AboutFragment===>","onMainEvent")
     }
+
+    @Subscriber(tag = "onFragmentEvent")
+    fun onFragmentEvent(event: String) {
+        Log.e("ZZZZ","onFragmentEvent => "+event)
+    };
 }

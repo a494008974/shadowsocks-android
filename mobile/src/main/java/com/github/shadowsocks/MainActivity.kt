@@ -57,6 +57,8 @@ import com.github.shadowsocks.widget.ServiceButton
 import com.github.shadowsocks.widget.StatsBar
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import org.simple.eventbus.EventBus
+import org.simple.eventbus.Subscriber
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity(), ShadowsocksConnection.Interface, OnPreferenceDataStoreChangeListener,
@@ -146,6 +148,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Interface, OnPre
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_main)
+
         stats = findViewById(R.id.stats)
         stats.setOnClickListener { if (state == BaseService.CONNECTED) stats.testConnection() }
         drawer = findViewById(R.id.drawer)
@@ -223,18 +226,33 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Interface, OnPre
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if (item.isChecked) drawer.closeDrawers() else {
             when (item.itemId) {
-                R.id.profiles -> displayFragment(ProfilesFragment())
-                R.id.globalSettings -> displayFragment(GlobalSettingsFragment())
+                R.id.profiles -> {
+                    displayFragment(ProfilesFragment())
+                    EventBus.getDefault().post("<===ProfilesFragment===>","onFragmentEvent")
+                }
+                R.id.globalSettings -> {
+                    displayFragment(GlobalSettingsFragment())
+                    EventBus.getDefault().post("<===GlobalSettingsFragment===>","onFragmentEvent")
+                }
                 R.id.about -> {
                     Core.analytics.logEvent("about", Bundle())
                     displayFragment(AboutFragment())
+                    EventBus.getDefault().post("<===AboutFragment===>","onFragmentEvent")
                 }
-                R.id.faq -> {
-//                    launchUrl(getString(R.string.faq_url))
-                    displayFragment(WebFragment())
+                R.id.customAd ->{
+                    displayFragment(WebFragment.newInstance("https://cn.bing.com/"))
+                    EventBus.getDefault().post("<===WebFragment===>","onFragmentEvent")
                     return true
                 }
-                R.id.customRules -> displayFragment(CustomRulesFragment())
+                R.id.faq -> {
+                    displayFragment(WebFragment.newInstance("https://www.baidu.com/"))
+                    EventBus.getDefault().post("<===WebFragment===>","onFragmentEvent")
+                    return true
+                }
+                R.id.customRules -> {
+                    displayFragment(CustomRulesFragment())
+                    EventBus.getDefault().post("<===CustomRulesFragment===>","onFragmentEvent")
+                }
                 else -> return false
             }
             item.isChecked = true
@@ -249,6 +267,7 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Interface, OnPre
 
     override fun onStart() {
         super.onStart()
+        EventBus.getDefault().register(this)
         connection.listeningForBandwidth = true
     }
 
@@ -273,8 +292,14 @@ class MainActivity : AppCompatActivity(), ShadowsocksConnection.Interface, OnPre
 
     override fun onStop() {
         connection.listeningForBandwidth = false
+        EventBus.getDefault().unregister(this)
         super.onStop()
     }
+
+    @Subscriber(tag = "onMainEvent")
+    fun onMainEvent(event: String) {
+        Log.e("ZZZZ","onMainEvent => "+event)
+    };
 
     override fun onDestroy() {
         super.onDestroy()

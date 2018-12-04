@@ -21,6 +21,7 @@
 package com.github.shadowsocks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 
 import android.view.LayoutInflater
@@ -30,15 +31,21 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import org.simple.eventbus.EventBus
+import org.simple.eventbus.Subscriber
 
 
 class WebFragment : ToolbarFragment() {
     private var mWebView: WebView? = null
 
     companion object {
-        // 定义WebView首页地址[伴生对象]
-        val WEB_URL = "https://www.baidu.com/"
-
+        fun newInstance(webUrl: String): WebFragment {
+            val fg = WebFragment()
+            val bundle = Bundle()
+            bundle.putString("url", webUrl)
+            fg.arguments = bundle
+            return fg
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -47,26 +54,29 @@ class WebFragment : ToolbarFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAndSetupView(view);
+        EventBus.getDefault().post("<===WebFragment===>","onMainEvent")
     }
 
     // 初始化对象
     fun initAndSetupView(view: View) {
+        var url = arguments?.getString("url")
         val webViewContainer = view.findViewById(R.id.web_container) as FrameLayout
         val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
         mWebView = WebView(activity)
         webViewContainer.addView(mWebView, params)
         var webSettings = mWebView!!.settings
+
         webSettings.javaScriptEnabled = true
         webSettings.javaScriptCanOpenWindowsAutomatically = true
         webSettings.allowFileAccess = true// 设置允许访问文件数据
         webSettings.setSupportZoom(true)//支持缩放
         webSettings.javaScriptCanOpenWindowsAutomatically = true
-        webSettings.cacheMode = WebSettings.LOAD_CACHE_ELSE_NETWORK
+        webSettings.cacheMode = WebSettings.LOAD_DEFAULT
         webSettings.domStorageEnabled = true
         webSettings.databaseEnabled = true
         mWebView!!.setOnKeyListener(OnKeyEvent)
         mWebView!!.setWebViewClient(webClient)
-        mWebView!!.loadUrl(WEB_URL)
+        mWebView!!.loadUrl(url)
     }
 
     private val webClient = object : WebViewClient() {
@@ -109,6 +119,9 @@ class WebFragment : ToolbarFragment() {
         mWebView = null
     }
 
-
+    @Subscriber(tag = "onFragmentEvent")
+    fun onFragmentEvent(event: String) {
+        Log.e("ZZZZ","onFragmentEvent => "+event)
+    };
 
 }

@@ -28,6 +28,7 @@ import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.text.format.Formatter
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -54,6 +55,8 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import net.glxn.qrgen.android.QRCode
 import org.json.JSONArray
+import org.simple.eventbus.EventBus
+import org.simple.eventbus.Subscriber
 
 class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
     companion object {
@@ -359,6 +362,7 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
                 profilesAdapter.commitMove()
             }
         }).attachToRecyclerView(profilesList)
+        EventBus.getDefault().post("<===ProfilesFragment===>","onMainEvent")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -492,4 +496,9 @@ class ProfilesFragment : ToolbarFragment(), Toolbar.OnMenuItemClickListener {
         ProfileManager.listener = null
         super.onDestroy()
     }
+
+    @Subscriber(tag = "onFragmentEvent")
+    fun onFragmentEvent(event: String) {
+        Log.e("ZZZZ","onFragmentEvent => "+event)
+    };
 }

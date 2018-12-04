@@ -21,9 +21,12 @@
 package com.github.shadowsocks
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import org.simple.eventbus.EventBus
+import org.simple.eventbus.Subscriber
 
 class GlobalSettingsFragment : ToolbarFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -37,5 +40,11 @@ class GlobalSettingsFragment : ToolbarFragment() {
         val fm = childFragmentManager
         fm.beginTransaction().replace(R.id.content, GlobalSettingsPreferenceFragment()).commit()
         fm.executePendingTransactions()
+        EventBus.getDefault().post("<===GlobalSettingsFragment===>","onMainEvent")
     }
+
+    @Subscriber(tag = "onFragmentEvent")
+    fun onFragmentEvent(event: String) {
+        Log.e("ZZZZ","onFragmentEvent => "+event)
+    };
 }
